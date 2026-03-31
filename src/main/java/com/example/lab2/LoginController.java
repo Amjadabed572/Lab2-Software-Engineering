@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class LoginController {
@@ -26,7 +27,7 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-    private ArrayList<User> validUsers = new ArrayList<>();
+    private final ArrayList<User> validUsers = new ArrayList<>();
 
     // This method runs automatically when the login screen is loaded
     @FXML
@@ -75,7 +76,7 @@ public class LoginController {
         if (isMatch) {
             try {
                 // Credentials match! Load the welcome screen
-                Parent welcomeRoot = FXMLLoader.load(getClass().getResource("welcome.fxml"));
+                Parent welcomeRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("welcome.fxml")));
 
                 // Get the current window and change its scene
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

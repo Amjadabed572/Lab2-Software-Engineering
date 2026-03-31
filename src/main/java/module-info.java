@@ -1,4 +1,4 @@
-module com.example.lab2 {
+module com.example.lab {
     requires javafx.controls;
     requires javafx.fxml;
 

@@ -6,12 +6,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Load the login screen FXML
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("login.fxml")));
 
         primaryStage.setTitle("Users Login");
         primaryStage.setScene(new Scene(root));
