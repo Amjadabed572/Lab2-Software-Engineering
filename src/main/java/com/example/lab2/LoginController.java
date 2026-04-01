@@ -1,4 +1,5 @@
 package com.example.lab2;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,8 +17,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
+// The Controller acts as the "brain" for your login.fxml screen
 public class LoginController {
 
+    // @FXML connects these variables to the visual elements you created in SceneBuilder
     @FXML
     private TextField usernameField;
 
@@ -27,12 +30,14 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
+    // A list to store only the users that pass your strict validation rules
     private final ArrayList<User> validUsers = new ArrayList<>();
 
-    // This method runs automatically when the login screen is loaded
+    // initialize() is a special JavaFX method that automatically runs the moment the screen loads
     @FXML
     public void initialize() {
         try {
+            // Read the text file as soon as the app starts
             File file = new File("users.txt");
             Scanner scanner = new Scanner(file);
 
@@ -43,11 +48,12 @@ public class LoginController {
                 String[] parts = line.split("\\s+");
                 if (parts.length >= 2) {
                     try {
-                        // Only valid users will be successfully created and added
+                        // The User constructor throws an exception if the format is bad.
+                        // If it succeeds, the user is valid and added to our list.
                         User user = new User(parts[0], parts[1]);
                         validUsers.add(user);
                     } catch (Exception e) {
-                        // We ignore invalid users for this lab
+                        // We intentionally ignore invalid users for this lab
                     }
                 }
             }
@@ -57,36 +63,39 @@ public class LoginController {
         }
     }
 
-    // This method runs when the user clicks the "login" button
+    // This method is triggered specifically when the user clicks the "login" button
     @FXML
     void onLoginButtonClick(ActionEvent event) {
+        // Grab the text the user actually typed into the boxes
         String inputUser = usernameField.getText();
         String inputPass = passwordField.getText();
 
         boolean isMatch = false;
 
-        // Check if the typed credentials match any valid user
+        // Loop through our list of valid users to see if the credentials match
         for (User u : validUsers) {
             if (u.getUsername().equals(inputUser) && u.getPassword().equals(inputPass)) {
                 isMatch = true;
-                break;
+                break; // Stop looking once we find a match
             }
         }
 
         if (isMatch) {
             try {
-                // Credentials match! Load the welcome screen
+                // Credentials match! Load the visual layout for the welcome screen
                 Parent welcomeRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("welcome.fxml")));
 
-                // Get the current window and change its scene
+                // Find the current window (Stage) based on the button that was clicked
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                // Swap the old login scene for the new welcome scene
                 stage.setScene(new Scene(welcomeRoot));
                 stage.setTitle("Welcome");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            // Credentials don't match! Show the exact error text requested
+            // Credentials don't match! Show the exact error text required by the lab
             errorLabel.setText("user or password do not match");
         }
     }
